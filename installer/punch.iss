@@ -60,11 +60,6 @@ Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: 
 Filename: "{app}\{#AppExeName}"; Description: "Launch Punch tray"; Flags: nowait postinstall skipifsilent; Tasks: launch
 
 [Code]
-const
-  HWND_BROADCAST = $FFFF;
-  WM_SETTINGCHANGE = $001A;
-  SMTO_ABORTIFHUNG = $0002;
-
 function SendMessageTimeout(hWnd: LongWord; Msg: LongWord; wParam: LongWord; lParam: String;
   fuFlags: LongWord; uTimeout: LongWord; var lpdwResult: LongWord): LongWord;
   external 'SendMessageTimeoutW@user32.dll stdcall';
@@ -124,8 +119,7 @@ procedure BroadcastEnvironmentChange();
 var
   ResultCode: LongWord;
 begin
-  SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, 'Environment',
-    SMTO_ABORTIFHUNG, 5000, ResultCode);
+  SendMessageTimeout($FFFF, $001A, 0, 'Environment', $0002, 5000, ResultCode);
 end;
 
 procedure AddInstallDirToPath();
