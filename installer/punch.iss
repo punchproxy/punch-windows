@@ -10,6 +10,14 @@
 #define Version "0.0.0"
 #endif
 
+#ifndef InstallerArch
+#define InstallerArch "x64compatible"
+#endif
+
+#ifndef OutputBaseFilename
+#define OutputBaseFilename "punch-windows-installer"
+#endif
+
 #define AppName "Punch"
 #define Publisher "punchproxy"
 #define AppExeName "punch-windows.exe"
@@ -26,12 +34,12 @@ DefaultDirName={autopf}\Punch
 DefaultGroupName=Punch
 DisableProgramGroupPage=yes
 OutputDir={#OutputDir}
-OutputBaseFilename=punch-windows-installer
+OutputBaseFilename={#OutputBaseFilename}
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-ArchitecturesAllowed=x64compatible
-ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed={#InstallerArch}
+ArchitecturesInstallIn64BitMode={#InstallerArch}
 PrivilegesRequired=admin
 SetupIconFile=..\punch-windows.ico
 UninstallDisplayIcon={app}\{#AppExeName}

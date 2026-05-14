@@ -13,6 +13,20 @@ jobs:
   build-installer:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        include:
+          - output: x64
+            goarch: amd64
+            goamd64: v3
+            vc_platform: x64
+            installer_arch: x64compatible
+          - output: arm64
+            goarch: arm64
+            goamd64: ""
+            vc_platform: ARM64
+            installer_arch: arm64
+
     steps:
       - name: Check out punch-windows
         uses: actions/checkout@v6
@@ -55,8 +69,8 @@ jobs:
         working-directory: punch
         env:
           GOOS: windows
-          GOARCH: amd64
-          GOAMD64: v3
+          GOARCH: ${{ matrix.goarch }}
+          GOAMD64: ${{ matrix.goamd64 }}
         run: |
           New-Item -ItemType Directory -Force ..\dist | Out-Null
           go build -v -ldflags "-X main.version=$env:VERSION" -o ..\dist\punchd.exe .\cmd\punchd
@@ -66,11 +80,11 @@ jobs:
         shell: pwsh
         working-directory: punch-windows
         run: |
-          msbuild punch-windows.vcxproj /m /p:Configuration=Release /p:Platform=x64
+          msbuild punch-windows.vcxproj /m /p:Configuration=Release /p:Platform=${{ matrix.vc_platform }}
           if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
           }
-          Copy-Item x64\Release\punch-windows.exe ..\dist\punch-windows.exe
+          Copy-Item "${{ matrix.vc_platform }}\Release\punch-windows.exe" ..\dist\punch-windows.exe
 
       - name: Install Inno Setup
         shell: pwsh
@@ -84,17 +98,19 @@ jobs:
           & $iscc installer\punch.iss `
             "/DSourceDir=$((Resolve-Path ..\dist).Path)" `
             "/DOutputDir=$((Resolve-Path ..).Path)" `
-            "/DVersion=$env:PACKAGE_VERSION"
+            "/DVersion=$env:PACKAGE_VERSION" `
+            "/DInstallerArch=${{ matrix.installer_arch }}" `
+            "/DOutputBaseFilename=punch-windows-${{ matrix.output }}-installer"
 
       - name: Upload installer artifact
         uses: actions/upload-artifact@v4
         with:
-          name: punch-windows-installer
-          path: punch-windows-installer.exe
+          name: punch-windows-${{ matrix.output }}-installer
+          path: punch-windows-${{ matrix.output }}-installer.exe
 
       - name: Upload installer to release
         if: github.event_name == 'release'
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$env:TAG" punch-windows-installer.exe --clobber
+        run: gh release upload "$env:TAG" punch-windows-${{ matrix.output }}-installer.exe --clobber
