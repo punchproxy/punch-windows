@@ -30,8 +30,8 @@ OutputBaseFilename=punch-windows-installer
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequired=admin
 SetupIconFile=..\punch-windows.ico
 UninstallDisplayIcon={app}\{#AppExeName}
@@ -54,7 +54,7 @@ Source: "{#SourceDir}\punchctl.exe"; DestDir: "{app}"; Flags: ignoreversion
 Name: "{autoprograms}\Punch"; Filename: "{app}\{#AppExeName}"
 
 [Registry]
-Root: HKCU; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Punch"; ValueData: """{app}\{#AppExeName}"""; Tasks: startup; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "Software\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Punch"; ValueData: """{app}\{#AppExeName}"""; Tasks: startup; Flags: uninsdeletevalue
 
 [Run]
 Filename: "{app}\{#AppExeName}"; Description: "Launch Punch tray"; Flags: nowait postinstall skipifsilent; Tasks: launch
