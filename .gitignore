@@ -1,0 +1,45 @@
+# Visual Studio local state
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Xx]86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bin/
+obj/
+
+# C/C++ compiler and linker outputs
+*.aps
+*.bsc
+*.cache
+*.dll
+*.exe
+*.exp
+*.ilk
+*.ipch
+*.iobj
+*.ipdb
+*.lib
+*.log
+*.obj
+*.opendb
+*.pch
+*.pdb
+*.res
+*.sbr
+*.tlog
+
+# Visual Studio database files
+*.VC.db
+*.VC.VC.opendb
+
+# Generated package/build folders
+packages/
+Generated Files/

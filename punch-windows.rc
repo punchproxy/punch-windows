@@ -1,0 +1,187 @@
+//Microsoft Visual C++ 生成的资源脚本。
+//
+#include "Resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// 从 TEXTINCLUDE 资源生成。
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 图标
+//
+
+// ID 值最低的图标放在最前面，以确保应用程序图标
+// 在所有系统中保持一致。
+
+IDI_PUNCHWINDOWS       ICON         "punch-windows.ico"
+IDI_SMALL               ICON         "small.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 菜单
+//
+
+IDC_PUNCHWINDOWS MENU
+BEGIN
+    POPUP "文件(&F)"
+    BEGIN
+        MENUITEM "退出(&X)",                IDM_EXIT
+    END
+    POPUP "帮助(&H)"
+    BEGIN
+        MENUITEM "关于(&A) ...",           IDM_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 快捷键
+//
+
+IDC_PUNCHWINDOWS ACCELERATORS
+BEGIN
+    "?",            IDM_ABOUT,              ASCII,  ALT
+    "/",            IDM_ABOUT,              ASCII,  ALT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 对话框
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于 punch-windows"
+FONT 9, "MS Shell Dlg"
+BEGIN
+    ICON            IDI_PUNCHWINDOWS,IDC_STATIC,14,14,21,20
+    LTEXT           "punch-windows, 版本 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "版权所有(c) 2026",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "确定",IDOK,113,41,50,14,WS_GROUP
+END
+IDD_CONFIGBOX DIALOGEX 0, 0, 260, 112
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Punch Config"
+FONT 9, "MS Shell Dlg"
+BEGIN
+    LTEXT           "API Address:",IDC_STATIC,10,14,58,8
+    EDITTEXT        IDC_API_ADDRESS,74,12,176,14,ES_AUTOHSCROLL
+    LTEXT           "API Secret:",IDC_STATIC,10,38,58,8
+    EDITTEXT        IDC_API_SECRET,74,36,176,14,ES_AUTOHSCROLL | ES_PASSWORD
+    AUTOCHECKBOX   "Update punchd settings",IDC_UPDATE_PUNCHD_SETTINGS,74,58,176,10
+    DEFPUSHBUTTON   "OK",IDOK,144,88,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,200,88,50,14
+END
+IDD_LOGSBOX DIALOGEX 0, 0, 520, 320
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_SIZEBOX
+CAPTION "Punch Logs"
+FONT 9, "MS Shell Dlg"
+BEGIN
+    LTEXT           "Verbosity:",IDC_STATIC,10,14,42,8
+    COMBOBOX        IDC_LOG_LEVEL,58,12,82,68,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Connecting...",IDC_LOG_STATUS,150,14,250,8
+    EDITTEXT        IDC_LOG_OUTPUT,10,34,500,252,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_READONLY | WS_VSCROLL | WS_HSCROLL
+    PUSHBUTTON      "Close",IDCANCEL,460,296,50,14
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+    IDD_CONFIGBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 253
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 105
+    END
+    IDD_LOGSBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 513
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 313
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+1 TEXTINCLUDE
+BEGIN
+    "Resource.h\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 字符串表
+//
+
+STRINGTABLE
+BEGIN
+   IDC_PUNCHWINDOWS   "PUNCHWINDOWS"
+   IDS_APP_TITLE       "punch-windows"
+END
+
+#endif
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// 从 TEXTINCLUDE 资源生成。
+//
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED

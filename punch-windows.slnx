@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="punch-windows.vcxproj" Id="6397a0c1-dc41-4465-ac20-4ea2821b183a" />
+</Solution>
