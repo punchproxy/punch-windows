@@ -1,0 +1,97 @@
+name: Build Installer
+
+on:
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-installer:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out punch-windows
+        uses: actions/checkout@v6
+        with:
+          path: punch-windows
+
+      - name: Check out punch
+        uses: actions/checkout@v6
+        with:
+          repository: punchproxy/punch
+          path: punch
+          token: ${{ secrets.PUNCH_CHECKOUT_TOKEN || github.token }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25"
+          cache-dependency-path: punch/go.sum
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Set variables
+        shell: pwsh
+        run: |
+          $tag = if ($env:GITHUB_REF_NAME) { $env:GITHUB_REF_NAME } elseif ("${{ github.event.release.tag_name }}") { "${{ github.event.release.tag_name }}" } else { "dev" }
+          $coreSha = git -C punch rev-parse --short HEAD
+          $version = "$($tag.ToLowerInvariant())-$coreSha" -replace '/', '-'
+          $packageVersion = $tag.TrimStart('v')
+          if ($packageVersion -notmatch '^\d+(\.\d+){0,3}$') {
+            $packageVersion = "0.0.0"
+          }
+
+          "TAG=$tag" >> $env:GITHUB_ENV
+          "VERSION=$version" >> $env:GITHUB_ENV
+          "PACKAGE_VERSION=$packageVersion" >> $env:GITHUB_ENV
+
+      - name: Build punch core
+        shell: pwsh
+        working-directory: punch
+        env:
+          GOOS: windows
+          GOARCH: amd64
+          GOAMD64: v3
+        run: |
+          New-Item -ItemType Directory -Force ..\dist | Out-Null
+          go build -v -ldflags "-X main.version=$env:VERSION" -o ..\dist\punchd.exe .\cmd\punchd
+          go build -v -ldflags "-X main.version=$env:VERSION" -o ..\dist\punchctl.exe .\cmd\punchctl
+
+      - name: Build tray app
+        shell: pwsh
+        working-directory: punch-windows
+        run: |
+          msbuild punch-windows.vcxproj /m /p:Configuration=Release /p:Platform=x64
+          Copy-Item x64\Release\punch-windows.exe ..\dist\punch-windows.exe
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+
+      - name: Build installer
+        shell: pwsh
+        working-directory: punch-windows
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          & $iscc installer\punch.iss `
+            "/DSourceDir=$((Resolve-Path ..\dist).Path)" `
+            "/DOutputDir=$((Resolve-Path ..).Path)" `
+            "/DVersion=$env:PACKAGE_VERSION"
+
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: punch-windows-installer
+          path: punch-windows-installer.exe
+
+      - name: Upload installer to release
+        if: github.event_name == 'release'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$env:TAG" punch-windows-installer.exe --clobber
