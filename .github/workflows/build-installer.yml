@@ -113,4 +113,4 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release upload "$env:TAG" punch-windows-${{ matrix.output }}-installer.exe --clobber
+        run: gh release upload "$env:TAG" punch-windows-${{ matrix.output }}-installer.exe --clobber --repo "$env:GITHUB_REPOSITORY"
